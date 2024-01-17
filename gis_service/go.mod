@@ -1,4 +1,4 @@
-module github.com/YANcomp/yanbackend/api_gateway
+module github.com/YANcomp/yanbackend/gis_service
 
 go 1.21.3
 

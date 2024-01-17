@@ -19,3 +19,7 @@
 
 # Go workspace file
 go.work
+/api_gateway/bin/
+/banners_service/bin/
+/stories_service/bin/
+/gis_service/bin/

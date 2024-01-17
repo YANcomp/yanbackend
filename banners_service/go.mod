@@ -1,4 +1,4 @@
-module github.com/YANcomp/yanbackend/api_gateway
+module github.com/YANcomp/yanbackend/banners_service
 
 go 1.21.3
 
