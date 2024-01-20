@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	baseUrl = "localhost:8081"
+	baseUrl = "localhost:8080"
 )
 
 func getHandler(w http.ResponseWriter, r *http.Request) {
-	var stringTest string
+	//var stringTest string
+	stringTest := "hello world"
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(stringTest); err != nil {
 		http.Error(w, "Failed to encode data", http.StatusInternalServerError)
