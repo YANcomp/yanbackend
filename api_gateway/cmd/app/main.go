@@ -1,33 +1,55 @@
 package main
 
 import (
-	"encoding/json"
-	"github.com/go-chi/chi"
+	"context"
+	"fmt"
+	desc "github.com/YANcomp/yanbackend/api_gateway/pkg/note_v1"
+	"github.com/brianvoe/gofakeit"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
-	"net/http"
+	"net"
 )
 
-const (
-	baseUrl = "localhost:8080"
-)
+const grpcPort = 50051
 
-func getHandler(w http.ResponseWriter, r *http.Request) {
-	//var stringTest string
-	stringTest := "hello world"
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(stringTest); err != nil {
-		http.Error(w, "Failed to encode data", http.StatusInternalServerError)
-		return
-	}
+type server struct {
+	desc.UnimplementedNoteV1Server
+}
+
+// Get ...
+func (s *server) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
+	log.Printf("Note id: %d", req.GetId())
+
+	return &desc.GetResponse{
+		Note: &desc.Note{
+			Id: req.GetId(),
+			Info: &desc.NoteInfo{
+				Title:    gofakeit.BeerName(),
+				Context:  gofakeit.IPv4Address(),
+				Author:   gofakeit.Name(),
+				IsPublic: gofakeit.Bool(),
+			},
+			CreatedAt: timestamppb.New(gofakeit.Date()),
+			UpdatedAt: timestamppb.New(gofakeit.Date()),
+		},
+	}, nil
 }
 
 func main() {
-	r := chi.NewRouter()
-
-	r.Get("/", getHandler)
-
-	err := http.ListenAndServe(baseUrl, r)
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer()
+	reflection.Register(s)
+	desc.RegisterNoteV1Server(s, &server{})
+
+	log.Printf("server listening at %v", lis.Addr())
+
+	if err = s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
 }

@@ -19,4 +19,4 @@ generate-note-api:
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
 	--go-grpc_out=pkg/note_v1 --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
-	--validate_out lang=go:pkg/note_v1 --validate_opt=paths=source_relative \
+	api/note_v1/note.proto
