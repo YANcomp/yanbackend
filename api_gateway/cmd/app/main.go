@@ -1,7 +1,32 @@
 package main
 
-import "log"
+import (
+	"encoding/json"
+	"github.com/go-chi/chi"
+	"log"
+	"net/http"
+)
+
+const (
+	baseUrl = "localhost:8081"
+)
+
+func getHandler(w http.ResponseWriter, r *http.Request) {
+	var stringTest string
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(stringTest); err != nil {
+		http.Error(w, "Failed to encode data", http.StatusInternalServerError)
+		return
+	}
+}
 
 func main() {
-	log.Println("hello world555")
+	r := chi.NewRouter()
+
+	r.Get("/", getHandler)
+
+	err := http.ListenAndServe(baseUrl, r)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

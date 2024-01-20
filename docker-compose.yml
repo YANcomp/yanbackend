@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  api_gateway:
+    container_name: api_gateway
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    networks: [ "yancobackend" ]
+
+networks:
+  yancobackend:
+    name: yancobackend

@@ -29,7 +29,7 @@ jobs:
         run: |
           TAG_NAME=$(echo $GITHUB_SHA | head -c7)
           docker buildx create --use
-          docker buildx build --no-cache --push --tag $REGISTRY/$IMAGE_NAME:$TAG_NAME -f api_gateway/Dockerfile api_gateway/ 
+          docker buildx build --no-cache --push --tag $REGISTRY/$IMAGE_NAME:latest -f api_gateway/Dockerfile api_gateway/ 
 
   deploy-image:
     runs-on: ubuntu-latest
@@ -56,5 +56,8 @@ jobs:
             # Remove old container
             docker rm $CONTAINER_NAME
             
+            # Remove old images
+            docker rmi $(docker images -a -q)
+            
             # Run a new container from a new image
-            docker run -d --name $CONTAINER_NAME -t $REGISTRY/$IMAGE_NAME:$TAG_NAME
+            docker run -d --name $CONTAINER_NAME -t $REGISTRY/$IMAGE_NAME:latest
