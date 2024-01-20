@@ -6,7 +6,7 @@ services:
     image: cr.selcloud.ru/yanbackend/api_gateway:latest
     container_name: api_gateway
     ports:
-      - '8081:8081'
+      - '50052:50052'
     networks: [ "yancobackend" ]
 
 networks:

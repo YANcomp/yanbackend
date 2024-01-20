@@ -12,14 +12,14 @@ import (
 	"net"
 )
 
-const grpcPort = 50051
+const grpcPort = 50052
 
 type server struct {
 	desc.UnimplementedNoteV1Server
 }
 
 // Get ...
-func (s *server) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
+func (s *server) Get(_ context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
 	log.Printf("Note id: %d", req.GetId())
 
 	return &desc.GetResponse{
