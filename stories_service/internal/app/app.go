@@ -80,20 +80,23 @@ func (a *App) initDeps(ctx context.Context) error {
 }
 
 func (a *App) initConfig(_ context.Context) error {
+	getwd, err := os.Getwd()
+	if err != nil {
+		return errors.Wrap(err, "os.Getwd")
+	}
+	var configFullPath string
+
 	if configPath == "" {
 		configPathFromEnv := os.Getenv("config_path")
 		if configPathFromEnv != "" {
-			configPath = configPathFromEnv
+			configFullPath = fmt.Sprintf("%s/%s", getwd, configPathFromEnv)
 		} else {
-			getwd, err := os.Getwd()
-			if err != nil {
-				return errors.Wrap(err, "os.Getwd")
-			}
-			configPath = fmt.Sprintf("%s/local.env", getwd)
+			configFullPath = fmt.Sprintf("%s/local.env", getwd)
 		}
 	}
 
-	err := config.Load(configPath)
+	configFullPath = fmt.Sprintf("%s/%s", getwd, configPath)
+	err = config.Load(configFullPath)
 	if err != nil {
 		return err
 	}
