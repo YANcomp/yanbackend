@@ -12,7 +12,7 @@ import (
 	"net"
 )
 
-const grpcPort = 50052
+const grpcPort = 50053
 
 type server struct {
 	desc.UnimplementedNoteV1Server
