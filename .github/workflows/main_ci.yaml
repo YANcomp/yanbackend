@@ -36,9 +36,6 @@ jobs:
     needs: image-build-and-push
 
     steps:
-      - name: List files
-        run: ls -a
-        shell: bash
       - name: Copy docker-compose file via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -46,8 +43,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSHKEY }}
           rm: true
-          source: "docker/*"
-          target: "/root/yancobackend/"
+          source: docker-compose.yml
+          target: /root/yancobackend/
       - name: Deploy to Selectel Cloud via SSH action
         uses: appleboy/ssh-action@v1.0.0
         with:
