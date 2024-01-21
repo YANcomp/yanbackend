@@ -12,6 +12,7 @@ services:
 
   pg-stories-service:
     image: postgres:14-alpine3.17
+    container_name: pg-stories-service
     restart: always
     environment:
       - POSTGRES_HOST=5432
@@ -25,6 +26,7 @@ services:
     networks: [ "yancobackend" ]
 
   stories_service:
+    container_name: stories_service
     platform: linux/amd64
     image: cr.selcloud.ru/yanbackend/stories_service:latest
     restart: always
@@ -35,6 +37,7 @@ services:
       - pg-stories-service
 
   stories_service-migrator-pg:
+    container_name: stories_service-migrator-pg
     platform: linux/amd64
     image: cr.selcloud.ru/yanbackend/stories_service_migrator_pg:latest
     restart: on-failure
