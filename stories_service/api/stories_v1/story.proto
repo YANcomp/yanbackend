@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package stories_v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/YANcomp/yanbackend/stories_service/pkg/stories_v1;stories_v1";
+
+service StoriesV1 {
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc List(ListRequest) returns (ListResponse);
+}
+
+message Story {
+  int64 ID = 1;
+  bool IsActive = 2;
+  bool IsActiveMobile = 3;
+  string Preview = 4;
+  repeated Slide Slides = 5;
+  string Title = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message Slide {
+  int64 ID = 1;
+  string BackgroundImage = 2;
+  string Caption = 3;
+  string Content = 4;
+  int64 Delay = 5;
+  bool IsHideShadowBottom = 6;
+  string TextPosition = 7;
+}
+
+message GetRequest {
+  int64 id = 1;
+}
+
+message GetResponse {
+  Story story = 1;
+}
+
+message ListRequest {
+  int64 limit = 1;
+  int64 offset = 2;
+}
+
+message ListResponse {
+  repeated Story stories = 1;
+}

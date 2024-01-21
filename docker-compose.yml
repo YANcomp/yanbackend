@@ -5,6 +5,7 @@ services:
     platform: linux/amd64
     image: cr.selcloud.ru/yanbackend/api_gateway:latest
     container_name: api_gateway
+    restart: always
     ports:
       - '50053:50053'
     networks: [ "yancobackend" ]

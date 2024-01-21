@@ -10,13 +10,13 @@ get-deps:
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 generate:
-	make generate-stories-api
+	make generate-story-api
 
-generate-stories-api:
+generate-story-api:
 	mkdir -p pkg/stories_v1
 	protoc --proto_path api/stories_v1 \
 	--go_out=pkg/stories_v1 --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
 	--go-grpc_out=pkg/stories_v1 --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
-	--validate_out lang=go:pkg/stories_v1 --validate_opt=paths=source_relative \
+	api/stories_v1/story.proto
