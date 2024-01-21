@@ -9,6 +9,7 @@ RUN go build -o ./bin/stories_service cmd/grpc_server/main.go
 FROM alpine:latest
 
 WORKDIR /root/
+COPY --from=builder /github.com/YANcomp/yanbackend/stories_service/source/prod.env .
 COPY --from=builder /github.com/YANcomp/yanbackend/stories_service/source/bin/stories_service .
 
 CMD ["./stories_service"]

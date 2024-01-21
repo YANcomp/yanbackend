@@ -94,8 +94,9 @@ func (a *App) initConfig(_ context.Context) error {
 			configFullPath = fmt.Sprintf("%s/local.env", getwd)
 		}
 	}
-
 	configFullPath = fmt.Sprintf("%s/%s", getwd, configPath)
+	log.Printf(configPath)
+	log.Printf(configFullPath)
 	err = config.Load(configFullPath)
 	if err != nil {
 		return err
