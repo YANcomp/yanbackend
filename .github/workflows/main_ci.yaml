@@ -36,6 +36,9 @@ jobs:
     needs: image-build-and-push
 
     steps:
+      - name: Checkout master
+        uses: actions/checkout@v3
+
       - name: Copy docker-compose file via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -45,6 +48,7 @@ jobs:
           rm: true
           source: docker-compose.yml
           target: /root/yancobackend/
+
       - name: Deploy to Selectel Cloud via SSH action
         uses: appleboy/ssh-action@v1.0.0
         with:
