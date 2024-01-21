@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Story struct {
@@ -11,7 +12,7 @@ type Story struct {
 	Preview        string       `json:"preview,omitempty"`
 	Slides         []*Slide     `json:"slides,omitempty"`
 	Title          string       `json:"title,omitempty"`
-	CreatedAt      sql.NullTime `json:"created_at"`
+	CreatedAt      time.Time    `json:"created_at"`
 	UpdatedAt      sql.NullTime `json:"updated_at"`
 }
 
@@ -20,7 +21,7 @@ type Slide struct {
 	BackgroundImage    string `json:"backgroundImage,omitempty"`
 	Caption            string `json:"caption,omitempty"`
 	Content            string `json:"content,omitempty"`
-	Delay              int32  `json:"delay,omitempty"`
+	Delay              int64  `json:"delay,omitempty"`
 	IsHideShadowBottom bool   `json:"isHideShadowBottom,omitempty"`
 	TextPosition       string `json:"textPosition,omitempty"`
 }

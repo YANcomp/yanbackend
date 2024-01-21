@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.25.0
-// source: story.proto
+// source: stories.proto
 
 package stories_v1
 
@@ -137,5 +137,5 @@ var StoriesV1_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "story.proto",
+	Metadata: "stories.proto",
 }

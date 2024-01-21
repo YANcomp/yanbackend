@@ -1,14 +1,6 @@
 version: "3.8"
 
 services:
-  api_gateway:
-    platform: linux/amd64
-    image: cr.selcloud.ru/yanbackend/api_gateway:latest
-    container_name: api_gateway
-    restart: always
-    ports:
-      - '50053:50053'
-
   pg-stories-service:
     image: postgres:14-alpine3.17
     container_name: pg-stories-service
@@ -23,22 +15,12 @@ services:
     volumes:
       - ./stories_service_postgresql:/var/lib/postgresql/data
 
-  stories_service:
-    container_name: stories_service
-    platform: linux/amd64
-    image: cr.selcloud.ru/yanbackend/stories_service:latest
-    restart: always
-    environment:
-      - config_path=prod.env
-    ports:
-      - "30016:30016"
-    depends_on:
-      - pg-stories-service
-
   stories_service-migrator-pg:
     container_name: stories_service-migrator-pg
     platform: linux/amd64
-    image: cr.selcloud.ru/yanbackend/stories_service_migrator_pg:latest
+    build:
+      context: ./stories_service
+      dockerfile: migration_prod.Dockerfile
     restart: on-failure
     environment:
       DB_HOST: pg-stories-service
