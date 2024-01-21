@@ -10,6 +10,40 @@ services:
       - '50053:50053'
     networks: [ "yancobackend" ]
 
+  pg-stories-service:
+    image: postgres:14-alpine3.17
+    restart: always
+    environment:
+      - POSTGRES_HOST=5432
+      - POSTGRES_DB=stories-db
+      - POSTGRES_USER=stories-db-user
+      - POSTGRES_PASSWORD=stories-db-password
+    ports:
+      - "54365:5432"
+    volumes:
+      - ./stories_service_postgresql:/var/lib/postgresql/data
+    networks: [ "yancobackend" ]
+
+  stories_service:
+    platform: linux/amd64
+    image: cr.selcloud.ru/yanbackend/stories_service:latest
+    restart: always
+    ports:
+      - "30016:30016"
+    networks: [ "yancobackend" ]
+    depends_on:
+      - pg-stories-service
+
+  stories_service-migrator-pg:
+    platform: linux/amd64
+    image: cr.selcloud.ru/yanbackend/stories_service_migrator_pg:latest
+    restart: on-failure
+    environment:
+      DB_HOST: pg-stories-service
+    depends_on:
+      - pg-stories-service
+
+
 networks:
   yancobackend:
     name: yancobackend

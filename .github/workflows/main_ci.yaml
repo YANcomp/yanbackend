@@ -8,8 +8,12 @@ on:
 
 env:
   REGISTRY: "cr.selcloud.ru/yanbackend"
-  IMAGE_NAME: "api_gateway"
-  CONTAINER_NAME: "api_gateway-container"
+  IMAGE_NAME_API_GATEWAY: "api_gateway"
+  IMAGE_NAME_BANNERS_SERVICE: "banners_service"
+  IMAGE_NAME_GIS_SERVICE: "gis_service"
+  IMAGE_NAME_STORIES_SERVICE: "stories_service"
+  IMAGE_NAME_STORIES_SERVICE_MIGRATOR: "stories_service_migrator_pg"
+  CONTAINER_NAME: "yancobackend"
 
 jobs:
   image-build-and-push:
@@ -25,11 +29,30 @@ jobs:
       - name: Login to Docker Registry
         run: docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} $REGISTRY
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Api-gateway Docker Image
         run: |
           TAG_NAME=$(echo $GITHUB_SHA | head -c7)
           docker buildx create --use
-          docker buildx build --no-cache --push --tag $REGISTRY/$IMAGE_NAME:latest -f api_gateway/Dockerfile api_gateway/ 
+          docker buildx build --no-cache --push -t $REGISTRY/$IMAGE_NAME_API_GATEWAY:latest -t $REGISTRY/$IMAGE_NAME_API_GATEWAY:$TAG_NAME -f api_gateway/Dockerfile api_gateway/ 
+
+      - name: Build and Push Banners-service Docker Image
+        run: |
+          TAG_NAME=$(echo $GITHUB_SHA | head -c7)
+          docker buildx create --use
+          docker buildx build --no-cache --push -t $REGISTRY/$IMAGE_NAME_BANNERS_SERVICE:latest -t $REGISTRY/$IMAGE_NAME_BANNERS_SERVICE:$TAG_NAME -f banners_service/Dockerfile banners_service/ 
+
+      - name: Build and Push GIS-service Docker Image
+        run: |
+          TAG_NAME=$(echo $GITHUB_SHA | head -c7)
+          docker buildx create --use
+          docker buildx build --no-cache --push -t $REGISTRY/$IMAGE_NAME_GIS_SERVICE:latest -t $REGISTRY/$IMAGE_NAME_GIS_SERVICE:$TAG_NAME -f gis_service/Dockerfile gis_service/ 
+
+      - name: Build and Push Stories-service Docker Image
+        run: |
+          TAG_NAME=$(echo $GITHUB_SHA | head -c7)
+          docker buildx create --use
+          docker buildx build --no-cache --push -t $REGISTRY/$IMAGE_NAME_STORIES_SERVICE:latest -t $REGISTRY/$IMAGE_NAME_STORIES_SERVICE:$TAG_NAME -f stories_service/Dockerfile stories_service/ 
+          docker buildx build --no-cache --push -t $REGISTRY/$IMAGE_NAME_STORIES_SERVICE_MIGRATOR:latest -t $REGISTRY/$IMAGE_NAME_STORIES_SERVICE_MIGRATOR:$TAG_NAME -f stories_service/migration_prod.Dockerfile stories_service/ 
 
   deploy-image:
     runs-on: ubuntu-latest
