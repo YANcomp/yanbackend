@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"os"
 )
@@ -13,6 +14,7 @@ const (
 
 type GRPCConfig interface {
 	Address() string
+	Port() string
 }
 
 type grpcConfig struct {
@@ -39,4 +41,7 @@ func NewGRPCConfig() (GRPCConfig, error) {
 
 func (cfg *grpcConfig) Address() string {
 	return net.JoinHostPort(cfg.host, cfg.port)
+}
+func (cfg *grpcConfig) Port() string {
+	return fmt.Sprintf(":%s", cfg.port)
 }
