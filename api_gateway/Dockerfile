@@ -9,6 +9,7 @@ RUN go build -o ./bin/api_gateway cmd/app/main.go
 FROM alpine:latest
 
 WORKDIR /root/
+COPY --from=builder /github.com/YANcomp/yanbackend/api_gateway/source/prod.env .
 COPY --from=builder /github.com/YANcomp/yanbackend/api_gateway/source/bin/api_gateway .
 
 CMD ["./api_gateway"]

@@ -1,33 +1,24 @@
 package main
 
 import (
-	"github.com/YANcomp/yanbackend/api_gateway/internal/middleware"
-	"github.com/gin-gonic/gin"
+	"context"
+	"flag"
+	"github.com/YANcomp/yanbackend/api_gateway/internal/app"
 	"log"
-	"net/http"
 )
 
 func main() {
-	router := gin.Default()
-	router.Use(middleware.UrlRewrite(router))
+	ctx := context.Background()
 
-	router.GET("/catalog/types", func(c *gin.Context) {
-		log.Println("test")
-		c.String(http.StatusOK, "types")
-	})
+	flag.Parse()
 
-	router.GET("/catalog/categories", func(c *gin.Context) {
-		c.String(http.StatusOK, "categories")
-	})
+	a, err := app.NewApp(ctx)
+	if err != nil {
+		log.Fatalf("failed to init app: %s", err.Error())
+	}
 
-	router.GET("/catalog/:regex", func(c *gin.Context) {
-		c.String(http.StatusOK, "regex")
-	})
-
-	router.GET("/products", func(c *gin.Context) {
-		c.String(http.StatusOK, "products")
-
-	})
-
-	router.Run(":8080")
+	err = a.Run()
+	if err != nil {
+		log.Fatalf("failed to run app: %s", err.Error())
+	}
 }

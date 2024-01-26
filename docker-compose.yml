@@ -6,6 +6,8 @@ services:
     image: cr.selcloud.ru/yanbackend/api_gateway:latest
     container_name: api_gateway
     restart: always
+    environment:
+      - config_path=prod.env
     ports:
       - '8080:8080'
 
